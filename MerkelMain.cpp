@@ -4,6 +4,7 @@
 #include <vector>
 #include <cfloat>
 #include <climits>
+#include "CSVReader.h"
 MerkelMain::MerkelMain() {
 }
 void MerkelMain::init() {
@@ -76,6 +77,17 @@ void MerkelMain::printHelp() {
 }
 void MerkelMain::printMarketStats() {
   std::cout << "OrderBook contains: " << orders.size() <<" entries" <<std::endl;
+  unsigned int bids = 0;
+  unsigned int asks = 0;
+  for(OrderBookEntry &e : orders){
+    if(e.orderType == OrderBookType::ask){
+      asks++;
+    }
+    if(e.orderType == OrderBookType::bid){
+      bids++;
+    }
+  }
+  std::cout << "OrderBook asks: " << asks << " bids: " << bids << std::endl;
 }
 void MerkelMain::enterAsk() {
   std::cout << "Place an ask - here you can place an ask order" << std::endl;
@@ -126,6 +138,5 @@ std::map<int, void (MerkelMain::*)()> MerkelMain::initMenu() {
   return menuOptions;
 }
 void MerkelMain::loadOrderBook() {
-  orders.push_back(OrderBookEntry(100.0, 1.0, "2024-06-01T12:00:00Z", "BTC/USD", OrderBookType::ask));
-  orders.push_back(OrderBookEntry(101.0, 2.0, "2024-06-01T12:01:00Z", "BTC/USD", OrderBookType::bid));
+   orders = CSVReader::readCSV("1XejnIsmSmK3o5yLJkpiUg_2402656ae54246e880715f135341f5f7_20200317.csv");
 }
